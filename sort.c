@@ -1,20 +1,113 @@
+//Asa Daboh
+//Lab assignment #8
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 int extraMemoryAllocated;
 
 // implements heap sort
 // extraMemoryAllocated counts bytes of memory allocated
+void swap(int* y, int* z)
+{
+ 
+    int temp = *y;
+    *y = *z;
+    *z = temp;
+}
+
+void heapify(int arr[], int n, int i)
+{
+   
+    int larger = i;
+    int L = 2 * i + 1;
+    int R = 2 * i + 2;
+ 
+    if (L < n && arr[L] > arr[larger])
+ 
+        larger = L;
+ 
+    if (R < n && arr[R] > arr[larger])
+ 
+        larger = R;
+ 
+    if (larger != i) {
+ 
+        swap(&arr[i], &arr[larger]);
+        heapify(arr, n, larger);
+    }
+}
+
 void heapSort(int arr[], int n)
 {
+
+     for (int i = n / 2 - 1; i >= 0; i--)
+ 
+        heapify(arr, n, i);
+ 
+    for (int i = n - 1; i >= 0; i--) {
+ 
+        swap(&arr[0], &arr[i]);
+        heapify(arr, i, 0);
+    }
 }
 
 
 // implement merge sort
 // extraMemoryAllocated counts bytes of extra memory allocated
+
+void merge(int pData[], int l, int m, int r){
+	int i, j, k;
+	int L1 = m - 1 + 1;
+	int L2 = r - m;
+
+	int L[L1], R[L2];
+
+	for(i = 0; i < L1; i++){
+		L[i] = pData[l+i];
+	}
+	for(j = 0; j < L2; j++){
+		R[j] = pData[m + 1 + j];
+	}
+	i = 0;
+	j = 0;
+	k = l;
+	while(i < L1 && j < L2){
+		if(L[i] <= R[j]){
+			pData[k] = L[i];
+			i++;
+		}
+		else{
+			pData[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+	while( i < L1){
+		pData[k] = L[i];
+		i++;
+		k++;
+	}
+
+	while( j < L2){
+		pData[k] = R[j];
+		j++;
+		k++;
+	}
+}
+
 void mergeSort(int pData[], int l, int r)
 {
+    if(l < r){
+
+		int m = (l+r)/2;
+
+		mergeSort(pData, l, m);
+		mergeSort(pData, m+1, r);
+		merge(pData, l, m, r);
+	}
+
 }
 
 // parses input file to an integer array
@@ -111,6 +204,8 @@ int main(void)
 		
 		free(pDataCopy);
 		free(pDataSrc);
+
+
 	}
 	
 }
